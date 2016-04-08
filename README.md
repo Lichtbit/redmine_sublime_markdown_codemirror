@@ -1,23 +1,15 @@
-# Redmine Code Mirror Editor plugin - Wiki/Issues
-
-![Editor Preview](https://github.com/gjroelofs/redmine_codemirror/blob/master/editor_preview.png)
+# Redmine Sublime Markdown Code Mirror Editor plugin
 
 CodeMirror integration plugin for Redmine editor (wiki/issues).
-It allows the user to use Textile, but with a WYSIWYM editor which highlights Textile syntax.
+It allows the user to use Markdown, but with a WYSIWYM editor which highlights Markdown syntax.
 It replaces the default editor in Redmine.
 
 Tested on: *2.3.x*
 
 #### Features
 - Syntax highlighting + CSS for headers
-- Folding (Ctrl-Q or sidebar)
-- Fullscreen (F10/esc)
-
-#### TODO
-- Marker / Macro syntax
-- Autocomplete
- - Macros
- - Pages
- - Attachments
+- Sublime key binding
 
 Icon Asset from: https://bitbucket.org/redminecrm/redmine_zenedit/src
+
+Original Version: https://github.com/gjroelofs/redmine_codemirror

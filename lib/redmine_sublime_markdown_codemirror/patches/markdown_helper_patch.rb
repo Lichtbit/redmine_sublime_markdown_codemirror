@@ -1,6 +1,6 @@
-module RedmineCodeMirror
+module RedmineSublimeMarkdownCodeMirror
   module Patches
-    module TextileHelperPatch
+    module MarkdownHelperPatch
       def self.included(base)
         base.send(:include, InstanceMethods)
 
@@ -38,7 +38,7 @@ module RedmineCodeMirror
                   return null;
                 }
               };
-              return CodeMirror.overlayMode(CodeMirror.getMode(config, parserConfig.backdrop || "text/x-textile"), macroOverlay);
+              return CodeMirror.overlayMode(CodeMirror.getMode(config, parserConfig.backdrop || "text/x-markdown"), macroOverlay);
             });
 
             var area = document.getElementById("#{field_id}");
@@ -46,20 +46,8 @@ module RedmineCodeMirror
                 lineNumbers: true,
                 mode: "macro",
                 lineWrapping: true,
-                foldGutter: true,
-                theme: "neo",
-                gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-                extraKeys: {
-                 "F10": function(cm) {
-                    cm.setOption("fullScreen", !cm.getOption("fullScreen"));
-                  },
-                  "Esc": function(cm) {
-                    if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
-                  },
-                  "Ctrl-Q": function(cm){ 
-                    cm.foldCode(cm.getCursor()); 
-                  }
-                }
+                gutters: ["CodeMirror-linenumbers"],
+                keyMap: "sublime"
             });
             
             area.id = "old_#{field_id}";
@@ -83,8 +71,6 @@ module RedmineCodeMirror
                 editor.refresh();
               }
             });
-
-           fullscreenButton(editorWrapper, editor);
             var wikiToolbar = new jsToolBar(editor);
             wikiToolbar.setHelpLink('#{escape_javascript url}');
             wikiToolbar.draw();
@@ -94,21 +80,14 @@ module RedmineCodeMirror
         def heads_for_codemirror
           unless @heads_for_codemirror_included
             content_for :header_tags do
-              javascript_include_tag(:jstoolbar_codemirror, :plugin => 'redmine_codemirror') +
-              javascript_include_tag(:jstoolbar_textile, :plugin => 'redmine_codemirror') +
+              javascript_include_tag(:jstoolbar_codemirror, plugin: 'redmine_sublime_markdown_codemirror') +
+              javascript_include_tag("jstoolbar/markdown") +
               javascript_include_tag("jstoolbar/lang/jstoolbar-#{current_language.to_s.downcase}") +
-              javascript_include_tag(:codemirror, :plugin => 'redmine_codemirror') +
-              javascript_include_tag(:textile, :plugin => 'redmine_codemirror') +
-              javascript_include_tag(:fullscreen, :plugin => 'redmine_codemirror') +
-              javascript_include_tag(:foldcode, :plugin => 'redmine_codemirror') +
-              javascript_include_tag(:foldgutter, :plugin => 'redmine_codemirror') +
-              javascript_include_tag(:textile_fold, :plugin => 'redmine_codemirror') +
-              javascript_include_tag(:overlay, :plugin => 'redmine_codemirror') +
-              stylesheet_link_tag(:codemirror, :plugin => 'redmine_codemirror') +
-              stylesheet_link_tag(:fullscreen, :plugin => 'redmine_codemirror') +
-              stylesheet_link_tag(:foldgutter, :plugin => 'redmine_codemirror') +
-              stylesheet_link_tag(:redmine_syntax, :plugin => 'redmine_codemirror')+
-              stylesheet_link_tag(:theme_neo, :plugin => 'redmine_codemirror') +
+              javascript_include_tag(:codemirror, plugin: 'redmine_sublime_markdown_codemirror') +
+              javascript_include_tag(:markdown, plugin: 'redmine_sublime_markdown_codemirror') +
+              javascript_include_tag(:overlay, plugin: 'redmine_sublime_markdown_codemirror') +
+              javascript_include_tag(:sublime, plugin: 'redmine_sublime_markdown_codemirror') +
+              stylesheet_link_tag(:codemirror, plugin: 'redmine_sublime_markdown_codemirror') +
               stylesheet_link_tag('jstoolbar')
             end
             @heads_for_codemirror_included = true
@@ -122,6 +101,6 @@ module RedmineCodeMirror
 end
 
 
-unless Redmine::WikiFormatting::Textile::Helper.included_modules.include?(RedmineCodeMirror::Patches::TextileHelperPatch)
-  Redmine::WikiFormatting::Textile::Helper.send(:include, RedmineCodeMirror::Patches::TextileHelperPatch)
+unless Redmine::WikiFormatting::Markdown::Helper.included_modules.include?(RedmineSublimeMarkdownCodeMirror::Patches::MarkdownHelperPatch)
+  Redmine::WikiFormatting::Markdown::Helper.send(:include, RedmineSublimeMarkdownCodeMirror::Patches::MarkdownHelperPatch)
 end

@@ -1,1 +1,0 @@
-require 'redmine_codemirror/patches/textile_helper_patch'

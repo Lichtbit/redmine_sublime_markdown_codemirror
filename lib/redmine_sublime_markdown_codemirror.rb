@@ -1,0 +1,1 @@
+require 'redmine_sublime_markdown_codemirror/patches/markdown_helper_patch'
