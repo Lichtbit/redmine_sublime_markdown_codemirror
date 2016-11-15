@@ -17,7 +17,7 @@ module RedmineSublimeMarkdownCodeMirror
 
           heads_for_codemirror
 
-          url = "#{Redmine::Utils.relative_url_root}/help/#{current_language.to_s.downcase}/wiki_syntax.html"
+          url = "#{Redmine::Utils.relative_url_root}/help/#{current_language.to_s.downcase}/wiki_syntax_markdown.html"
 
           # wikitoolbar_for_without_codemirror(field_id) +
           javascript_tag(%(
