@@ -14,13 +14,13 @@ module RedmineSublimeMarkdownCodeMirror
 
       module InstanceMethods
         def wikitoolbar_for_with_codemirror(field_id)
-
-          heads_for_codemirror
+          @heads_for_codemirror_included = true
 
           url = "#{Redmine::Utils.relative_url_root}/help/#{current_language.to_s.downcase}/wiki_syntax_markdown.html"
 
           # wikitoolbar_for_without_codemirror(field_id) +
           javascript_tag(%(
+			$(function() {
             CodeMirror.defineMode("macro", function(config, parserConfig) {
               var macroOverlay = {
                 token: function(stream, state) {
@@ -80,29 +80,29 @@ module RedmineSublimeMarkdownCodeMirror
 	        $('#issue_description_and_toolbar').children('.CodeMirror')[0].CodeMirror.refresh()
 	      }, 100);
             });
+			});
           ))
         end
-
-        def heads_for_codemirror
-          unless @heads_for_codemirror_included
-            content_for :header_tags do
-              javascript_include_tag(:jstoolbar_codemirror, plugin: 'redmine_sublime_markdown_codemirror') +
-              javascript_include_tag("jstoolbar/markdown") +
-              javascript_include_tag("jstoolbar/lang/jstoolbar-#{current_language.to_s.downcase}") +
-              javascript_include_tag(:codemirror, plugin: 'redmine_sublime_markdown_codemirror') +
-              javascript_include_tag(:markdown, plugin: 'redmine_sublime_markdown_codemirror') +
-              javascript_include_tag(:overlay, plugin: 'redmine_sublime_markdown_codemirror') +
-              javascript_include_tag(:sublime, plugin: 'redmine_sublime_markdown_codemirror') +
-              stylesheet_link_tag(:codemirror, plugin: 'redmine_sublime_markdown_codemirror') +
-              stylesheet_link_tag('jstoolbar')
-            end
-            @heads_for_codemirror_included = true
-          end
-        end
-
       end
-      
     end
+  end
+
+  class Hooks < Redmine::Hook::ViewListener
+	def view_layouts_base_body_bottom(context={})
+      if context[:hook_caller].instance_variable_get(:@heads_for_codemirror_included)
+		s = ''
+		s += javascript_include_tag(:jstoolbar_codemirror, plugin: 'redmine_sublime_markdown_codemirror')
+		s += javascript_include_tag("jstoolbar/markdown")
+		s += javascript_include_tag("jstoolbar/lang/jstoolbar-#{current_language.to_s.downcase}")
+		s += javascript_include_tag(:codemirror, plugin: 'redmine_sublime_markdown_codemirror')
+		s += javascript_include_tag(:markdown, plugin: 'redmine_sublime_markdown_codemirror')
+		s += javascript_include_tag(:overlay, plugin: 'redmine_sublime_markdown_codemirror')
+		s += javascript_include_tag(:sublime, plugin: 'redmine_sublime_markdown_codemirror')
+		s += stylesheet_link_tag(:codemirror, plugin: 'redmine_sublime_markdown_codemirror')
+		s += stylesheet_link_tag('jstoolbar')
+		s.html_safe
+      end
+	end
   end
 end
 
