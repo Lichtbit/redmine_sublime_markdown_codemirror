@@ -46,7 +46,7 @@ module RedmineSublimeMarkdownCodeMirror
                 lineNumbers: true,
                 mode: "macro",
                 lineWrapping: true,
-                gutters: ["CodeMirror-linenumbers"],
+		gutters: ["CodeMirror-linenumbers"],
                 keyMap: "sublime"
             });
             
@@ -74,6 +74,12 @@ module RedmineSublimeMarkdownCodeMirror
             var wikiToolbar = new jsToolBar(editor);
             wikiToolbar.setHelpLink('#{escape_javascript url}');
             wikiToolbar.draw();
+
+	    $('#issue_description_and_toolbar').siblings('a').click(function() {
+	      window.setTimeout(function() {
+	        $('#issue_description_and_toolbar').children('.CodeMirror')[0].CodeMirror.refresh()
+	      }, 100);
+            });
           ))
         end
 
