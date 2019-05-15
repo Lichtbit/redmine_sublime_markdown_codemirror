@@ -47,7 +47,8 @@ module RedmineSublimeMarkdownCodeMirror
                 mode: "macro",
                 lineWrapping: true,
 		gutters: ["CodeMirror-linenumbers"],
-                keyMap: "sublime"
+                keyMap: "sublime",
+		spellcheck: true
             });
             
             area.id = "old_#{field_id}";
